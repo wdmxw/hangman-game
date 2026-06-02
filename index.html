@@ -284,13 +284,13 @@
         }
 
         function getDisplayWord() {
-            // Return the words on a single line with extra spacing between words
-            // e.g. "_ _ _ _ _   _ _ _ _   _ _ _ _ _"
+            // Return each word on its own line so the display shows three separate lines
+            // e.g. "_ _ _ _ _\n_ _ _ _\n_ _ _ _ _"
             return WORD.split(' ').map(word =>
                 word.split('').map(letter =>
                     correctLetters.has(letter) ? letter : '_'
                 ).join(' ')
-            ).join('   '); // three spaces between words
+            ).join('\n'); // newline between words
         }
 
         function updateDisplay() {
