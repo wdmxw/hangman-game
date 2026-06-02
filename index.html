@@ -73,14 +73,25 @@
         }
 
         .word-display p {
-            font-size: 2.0em; /* smaller so three lines fit */
+            margin: 0;
+        }
+
+        /* New word-line and letter styles to prevent wrapping and control spacing */
+        .word-line {
+            white-space: nowrap; /* prevent letters of a word from wrapping */
+            margin: 6px 0;
+            text-align: center;
+        }
+
+        .word-line .letter {
+            display: inline-block;
+            width: 1.2em;
             font-family: 'Courier New', monospace;
             font-weight: bold;
+            font-size: 2.0em;
             color: #0064c8;
-            letter-spacing: 7px; /* tighten spacing */
-            line-height: 1.4;
-            white-space: pre; /* preserve newlines and spaces */
-            margin: 0;
+            text-align: center;
+            margin: 0 6px;
         }
 
         .stats {
@@ -175,9 +186,9 @@
                 font-size: 1.8em;
             }
 
-            .word-display p {
-                font-size: 1.4em;
-                letter-spacing: 3px;
+            .word-line .letter {
+                font-size: 1.2em;
+                margin: 0 4px;
             }
 
             canvas {
@@ -198,9 +209,7 @@
 
             <div class="game-section">
                 <div class="word-display">
-                    <p id="wordDisplay">_ _ _ _ _
-_ _ _ _
-_ _ _ _ _ _</p>
+                    <p id="wordDisplay"></p>
                 </div>
 
                 <div class="stats">
@@ -286,18 +295,21 @@ _ _ _ _ _ _</p>
             );
         }
 
-        function getDisplayWord() {
-            // Return each word on its own line so the display shows three separate lines
-            // e.g. "_ _ _ _ _\n_ _ _ _\n_ _ _ _ _"
-            return WORD.split(' ').map(word =>
-                word.split('').map(letter =>
-                    correctLetters.has(letter) ? letter : '_'
-                ).join(' ')
-            ).join('\n'); // newline between words
+        function renderWordDisplay() {
+            // Build HTML: one .word-line per word, each letter in a .letter span
+            const parts = WORD.split(' ');
+            const lines = parts.map(word => {
+                const letters = word.split('').map(letter => {
+                    const show = correctLetters.has(letter) ? letter : '_';
+                    return `<span class="letter">${show}</span>`;
+                }).join('');
+                return `<div class="word-line">${letters}</div>`;
+            });
+            wordDisplay.innerHTML = lines.join('');
         }
 
         function updateDisplay() {
-            wordDisplay.textContent = getDisplayWord();
+            renderWordDisplay();
             guessedDisplay.textContent = Array.from(guessedLetters).sort().join(' ') || 'None';
             wrongDisplay.textContent = wrongGuesses;
         }
