@@ -225,7 +225,6 @@
         let correctLetters = new Set();
         let wrongGuesses = 0;
         let gameWon = false;
-        let bonusUsed = false;
 
         const canvas = document.getElementById('hangmanCanvas');
         const ctx = canvas.getContext('2d');
@@ -262,11 +261,8 @@
                 }
             } else {
                 wrongGuesses++;
-                if (wrongGuesses >= MAX_WRONG && !bonusUsed) {
-                    bonusUsed = true;
+                if (wrongGuesses >= MAX_WRONG) {
                     showBonusPopup();
-                } else if (wrongGuesses >= MAX_WRONG && bonusUsed) {
-                    endGame(false);
                 }
             }
 
