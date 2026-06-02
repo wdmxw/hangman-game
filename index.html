@@ -297,7 +297,14 @@
 
         function renderWordDisplay() {
             // Build HTML: one .word-line per word, each letter in a .letter span
-            const parts = WORD.split(' ');
+            // Ensure we treat multiple spaces and keep exactly three logical words
+            let parts = WORD.trim().split(/\s+/);
+            if (parts.length > 3) {
+                // Merge any extra parts into the last word
+                parts = [parts[0] || '', parts[1] || '', parts.slice(2).join(' ')];
+            }
+            while (parts.length < 3) parts.push('');
+
             const lines = parts.map(word => {
                 const letters = word.split('').map(letter => {
                     const show = correctLetters.has(letter) ? letter : '_';
