@@ -79,7 +79,7 @@
             color: #0064c8;
             letter-spacing: 10px;
             line-height: 2;
-            white-space: pre-line;
+            white-space: pre; /* preserve multiple spaces between words */
         }
 
         .stats {
@@ -284,11 +284,13 @@
         }
 
         function getDisplayWord() {
+            // Return the words on a single line with extra spacing between words
+            // e.g. "_ _ _ _ _   _ _ _ _   _ _ _ _ _"
             return WORD.split(' ').map(word =>
                 word.split('').map(letter =>
                     correctLetters.has(letter) ? letter : '_'
                 ).join(' ')
-            ).join('\n');
+            ).join('   '); // three spaces between words
         }
 
         function updateDisplay() {
